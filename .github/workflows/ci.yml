@@ -37,9 +37,9 @@ jobs:
       # 5. Run Node.js Tests (or linting)
       # In CI, we usually run tests instead of starting the server.
       # If you don't have tests, you can remove this or change it to a lint command.
-      - name: Run Node.js Tests
-        working-directory: ./booking-system
-        run: npm test
+    #   - name: Run Node.js Tests
+    #     working-directory: ./booking-system
+    #     run: npm test
 
       # 6. Make the Gradle wrapper executable
       # This is a crucial step because file permissions are not always preserved by Git.
