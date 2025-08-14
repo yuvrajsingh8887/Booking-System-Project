@@ -49,6 +49,15 @@ jobs:
 
       # 7. Run the Groovy/Gradle application
       # Uses the Linux/macOS gradlew script, not the .bat file
-      - name: Run Groovy Validator with Gradle
+
+      #by this build the project in github and mark at green tick
+      - name: Build Groovy Validator with Gradle
         working-directory: ./groovy-validator
-        run: ./gradlew run
+        run: ./gradlew build
+
+        #by this it continuosly run the process
+    #   - name: Run Groovy Validator with Gradle
+    #     working-directory: ./groovy-validator
+    #     run: ./gradlew run
+
+        
