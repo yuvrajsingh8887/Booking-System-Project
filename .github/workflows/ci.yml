@@ -1,50 +1,54 @@
-# Name for your workflow
-name: Node.js and Groovy CI
+name: Full CI Pipeline
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push events for the "main" branch
   push:
     branches: [ "main" ]
-  # Triggers the workflow on pull request events for any branch
   pull_request:
     branches: [ "*" ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build-and-validate"
-  build-and-validate:
-    # The type of runner that the job will run on
+  build-and-test:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # 1. Checks out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # 1. Checks out your repository code
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2. Sets up the Node.js environment
+      # 2. Sets up Node.js environment
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x' # Use a Long-Term Support (LTS) version of Node.js
-          cache: 'npm' # Caches npm dependencies for faster builds
+          node-version: '20.x'
+          cache: 'npm'
+          cache-dependency-path: Booking-system/package-lock.json
 
-      # 3. Sets up the Java environment required to run Groovy
-      - name: Setup Java (for Groovy)
+      # 3. Sets up Java environment for Gradle/Groovy
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin' # A popular, open-source JDK distribution
-          java-version: '17' # Groovy runs on the JVM
+          distribution: 'temurin'
+          java-version: '17' # Or whatever version your Gradle project needs
 
-      # 4. Installs your Node.js project dependencies
+      # 4. Install Node.js dependencies
       - name: Install Node.js Dependencies
-        run: npm ci # 'ci' is faster and safer for automated environments than 'install'
+        working-directory: ./Booking-system
+        run: npm ci
 
-      # 5. Run your Node.js tests (if you have any)
+      # 5. Run Node.js Tests (or linting)
+      # In CI, we usually run tests instead of starting the server.
+      # If you don't have tests, you can remove this or change it to a lint command.
       - name: Run Node.js Tests
-        run: npm test # Assumes your test command is 'npm test'
+        working-directory: ./Booking-system
+        run: npm test
 
-      # 6. Run your Groovy schema validation script
-      - name: Run Groovy Schema Validation
-        run: groovy your-schema-validator.groovy # <-- IMPORTANT: Change this filename!
+      # 6. Make the Gradle wrapper executable
+      # This is a crucial step because file permissions are not always preserved by Git.
+      - name: Make gradlew executable
+        working-directory: ./groovy-validator
+        run: chmod +x ./gradlew
+
+      # 7. Run the Groovy/Gradle application
+      # Uses the Linux/macOS gradlew script, not the .bat file
+      - name: Run Groovy Validator with Gradle
+        working-directory: ./groovy-validator
+        run: ./gradlew run
