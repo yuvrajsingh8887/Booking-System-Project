@@ -1,0 +1,10 @@
+# config.yml
+port: 3000
+jwtSecret: "my_secret_Key_123" 
+
+# PostgreSQL Database Configuration
+pgUser: "postgres"
+pgHost: "localhost"
+pgDatabase: "booking_system_db"
+pgPassword: "yuvraj@?0"
+pgPort: 5432

@@ -1,0 +1,20 @@
+// groovy-validator/build.gradle
+plugins {
+    id 'groovy'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.groovy:groovy:4.0.5'
+    implementation 'com.sparkjava:spark-core:2.9.4'
+    implementation 'org.apache.groovy:groovy-json:4.0.5'
+    implementation 'org.slf4j:slf4j-simple:2.0.3'
+}
+
+application {
+    mainClass = 'com.yourproject.Validator'
+}
